@@ -1,7 +1,7 @@
 from pygame import*
 from random import*
 
-def text(message,x,y,font_color,font_size, font_type='font.otf'):
+def text(message,x,y,font_color,font_size, font_type='assets/font.otf'):
         font_type=font.Font(font_type,font_size)
         text=font_type.render(message,True,font_color)
         window.blit (text, (x,y))
@@ -16,11 +16,12 @@ mm=0
 move=0
 fire=0
 no_fire=0
-mixer.music.load('mario_theme.ogg')
+# Corrected file path and typo
+mixer.music.load('assets/mario-theme.ogg')
 mixer.music.play(-1)
 mixer.music.set_volume(0.1)
-ouchs=mixer.Sound('ouchs.ogg')
-bye=mixer.Sound('goomba-destroy.ogg')
+ouchs=mixer.Sound('assets/ouchs.ogg')
+bye=mixer.Sound('assets/goomba-destroy.ogg')
 mx=43
 my=80
 big=0
@@ -28,15 +29,17 @@ game=1
 time_set=0
 fire_time1=time.get_ticks()
 fire_time2=time.get_ticks()
-end=mixer.Sound('game-over.ogg')
-jump=mixer.Sound('stomp.ogg')
+# Corrected file path and typo (assuming 'mario-end.ogg')
+end=mixer.Sound('assets/mario-end.ogg') 
+jump=mixer.Sound('assets/stomp.ogg')
 sound=0
 jump_count=30
 score = 0
 goomba_direction=0
-csound=mixer.Sound('coin-sound.ogg')
-power=mixer.Sound('power-up.ogg')
-win=mixer.Sound('mario-win.ogg')
+# This file is MISSING from your assets folder!
+csound=mixer.Sound('assets/coin-sound.ogg') 
+power=mixer.Sound('assets/power-up.ogg')
+win=mixer.Sound('assets/mario-win.ogg')
 goomba_bye=0
 black = (0,0,0)
 red = (255,0,0)
@@ -69,7 +72,7 @@ map=[
 class  Ground (sprite.Sprite):
     def __init__(self, x,y,id):
         sprite.Sprite.__init__(self)
-        self.image = image.load('ground.png')
+        self.image = image.load('assets/ground.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.id = id
@@ -86,7 +89,7 @@ class  Ground (sprite.Sprite):
 class  Castle (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('mario-castle.png')
+        self.image = image.load('assets/mario-castle.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
@@ -102,7 +105,7 @@ class  Castle (sprite.Sprite):
 class  Stair (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('stair.png')
+        self.image = image.load('assets/stair.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
@@ -120,7 +123,7 @@ class  Stair (sprite.Sprite):
 class  Fireball (sprite.Sprite):
     def __init__(self, x,y,dir):
         sprite.Sprite.__init__(self)
-        self.image = image.load('fireball.png')
+        self.image = image.load('assets/fireball.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.direction=dir
@@ -157,7 +160,7 @@ class  Fireball (sprite.Sprite):
 class  Barrier (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('barrier.png')
+        self.image = image.load('assets/barrier.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
 
@@ -166,7 +169,7 @@ class  Barrier (sprite.Sprite):
 class  Fbarrier (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('barrier.png')
+        self.image = image.load('assets/barrier.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
@@ -184,7 +187,7 @@ class  Fbarrier (sprite.Sprite):
 class  Flower (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('fire_flower.png')
+        self.image = image.load('assets/fire_flower.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
@@ -204,7 +207,7 @@ class  Flower (sprite.Sprite):
 class  Goomba (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('goomba.png')
+        self.image = image.load('assets/goomba.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.direction=-3
@@ -234,7 +237,7 @@ class  Goomba (sprite.Sprite):
             goomba_bye+=1
         elif mario.rect.collidepoint(self.rect.left,self.rect.centery) or mario.rect.collidepoint(self.rect.right,self.rect.centery):
             global sound
-            mario.image = image.load('ouch.png')
+            mario.image = image.load('assets/ouch.png')
             if sound == 0:
                 game=0
                 sound+=1
@@ -249,7 +252,7 @@ class  Goomba (sprite.Sprite):
 class  Mushroom (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('mushroom.png')
+        self.image = image.load('assets/mushroom.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
@@ -264,7 +267,7 @@ class  Mushroom (sprite.Sprite):
 class  Fquestion (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('question.png')
+        self.image = image.load('assets/question.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.state = True
@@ -290,7 +293,7 @@ class  Fquestion (sprite.Sprite):
             # else:
             #     mushroom = Mushroom(self.rect.centerx,self.rect.top-13)
             #     mushroom_group.add(mushroom)
-            self.image = image.load('empty.png')
+            self.image = image.load('assets/empty.png')
             # print('yay')
             self.state = False
             obstacle_group.add(self)
@@ -298,7 +301,7 @@ class  Fquestion (sprite.Sprite):
 class  Question (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('question.png')
+        self.image = image.load('assets/question.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.state = True
@@ -323,7 +326,7 @@ class  Question (sprite.Sprite):
             # else:
             #     mushroom = Mushroom(self.rect.centerx,self.rect.top-13)
             #     mushroom_group.add(mushroom)
-            self.image = image.load('empty.png')
+            self.image = image.load('assets/empty.png')
             # print('yay')
             self.state = False
             obstacle_group.add(self)
@@ -331,7 +334,7 @@ class  Question (sprite.Sprite):
 class  Mquestion (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('question.png')
+        self.image = image.load('assets/question.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.state = True
@@ -356,7 +359,7 @@ class  Mquestion (sprite.Sprite):
             # else:
             mushroom = Mushroom(self.rect.centerx,self.rect.top-13)
             mushroom_group.add(mushroom)
-            self.image = image.load('empty.png')
+            self.image = image.load('assets/empty.png')
             # print('yay')
             self.state = False
             obstacle_group.add(self)
@@ -364,7 +367,7 @@ class  Mquestion (sprite.Sprite):
 class  Brick (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('mario-brick.png')
+        self.image = image.load('assets/mario-brick.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.id = 0
@@ -380,7 +383,7 @@ class  Brick (sprite.Sprite):
 class  Tnt (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('tnt.png')
+        self.image = image.load('assets/tnt.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
@@ -395,7 +398,7 @@ class  Tnt (sprite.Sprite):
 class  Coin (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('coin2.png')
+        self.image = image.load('assets/coin2.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
@@ -416,7 +419,7 @@ class  Coin (sprite.Sprite):
 class  Mario (sprite.Sprite):
     def __init__(self, x,y):
         sprite.Sprite.__init__(self)
-        self.image = image.load('mario1.png')
+        self.image = image.load('assets/mario1.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.direction = 'down'
@@ -457,7 +460,7 @@ class  Mario (sprite.Sprite):
             move=0
         # global fire
         if fire==1:
-            self.image = image.load('fire_mario.png')
+            self.image = image.load('assets/fire_mario.png')
             fireball_set=fire
             # fire=3
             # pass
@@ -474,7 +477,7 @@ class  Mario (sprite.Sprite):
             mixer.Sound.play(power)
         if sprite.spritecollide(self,tnt_group,False):
             global goomba_bye
-            self.image = image.load('ouch.png')
+            self.image = image.load('assets/ouch.png')
             mixer.Sound.play(ouchs)
         # global keys, fireball
         keys=key.get_pressed()
@@ -490,7 +493,7 @@ class  Mario (sprite.Sprite):
         # if goomba_bye==0:
         #     if self.rect.collidepoint(goomba.rect.left,goomba.rect.centery) or self.rect.collidepoint(goomba.rect.right,goomba.rect.centery):
         #         # goomba.kill()
-        #         self.image = image.load('ouch.png')
+        #         self.image = image.load('assets/ouch.png')
         #         mixer.Sound.play(ouchs)
         #         # display.update()
         #         # time.delay(5000)
@@ -505,12 +508,12 @@ class  Mario (sprite.Sprite):
             mari=0
             mm=0
             # global mari, mm
-            mari='mario1.png'
-            mm='mario1-left.png'
+            mari='assets/mario1.png'
+            mm='assets/mario1-left.png'
         if fire==1:
             # global mari, mm
-            mari='fire_mario.png'
-            mm='fire_mario-left.png'
+            mari='assets/fire_mario.png'
+            mm='assets/fire_mario-left.png'
             fire=3
             transform.scale(self.image,(36,60))
         if move == 0:
@@ -692,7 +695,7 @@ while run:
         # Fireball.kill
         # time.delay(1000)
         mixer.music.fadeout(1000)
-        firework=image.load('fireworks.png')
+        firework=image.load('assets/fireworks.png')
         window.blit(firework, (width//2-150, 30))
         mixer.Sound.play(win)
         text('YOU WIN!', width/2-250, height/2-100, 'green', 100)
