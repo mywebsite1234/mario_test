@@ -16,11 +16,11 @@ mm=0
 move=0
 fire=0
 no_fire=0
-mixer.music.load('mario_theme.mp3')
+mixer.music.load('mario_theme.ogg')
 mixer.music.play(-1)
 mixer.music.set_volume(0.1)
-ouchs=mixer.Sound('ouchs.mp3')
-bye=mixer.Sound('goomba-destroy.wav')
+ouchs=mixer.Sound('ouchs.ogg')
+bye=mixer.Sound('goomba-destroy.ogg')
 mx=43
 my=80
 big=0
@@ -28,15 +28,15 @@ game=1
 time_set=0
 fire_time1=time.get_ticks()
 fire_time2=time.get_ticks()
-end=mixer.Sound('game-over.mp3')
-jump=mixer.Sound('stomp.wav')
+end=mixer.Sound('game-over.ogg')
+jump=mixer.Sound('stomp.ogg')
 sound=0
 jump_count=30
 score = 0
 goomba_direction=0
-csound=mixer.Sound('coin-sound.wav')
-power=mixer.Sound('power-up.wav')
-win=mixer.Sound('mario-win.mp3')
+csound=mixer.Sound('coin-sound.ogg')
+power=mixer.Sound('power-up.ogg')
+win=mixer.Sound('mario-win.ogg')
 goomba_bye=0
 black = (0,0,0)
 red = (255,0,0)
