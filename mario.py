@@ -1,6 +1,9 @@
 from pygame import*
 from random import*
 
+import os
+os.environ['SDL_AUDIODRIVER'] = 'dummy'
+
 def text(message,x,y,font_color,font_size, font_type='assets/font.otf'):
         font_type=font.Font(font_type,font_size)
         text=font_type.render(message,True,font_color)
