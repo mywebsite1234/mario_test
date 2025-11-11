@@ -1,48 +1,42 @@
-from pygame import*
-from random import*
-
-import os
-os.environ['SDL_AUDIODRIVER'] = 'dummy'
+import pyjsdl as pygame
+from random import *
 
 def text(message,x,y,font_color,font_size, font_type='assets/font.otf'):
-        font_type=font.Font(font_type,font_size)
+        font_type=pygame.font.Font(font_type,font_size)
         text=font_type.render(message,True,font_color)
         window.blit (text, (x,y))
 
 
 
 
-init()
+pygame.init()
 fireball_set=0
 mari=0
 mm=0
 move=0
 fire=0
 no_fire=0
-# Corrected file path and typo
-mixer.music.load('assets/mario-theme.ogg')
-mixer.music.play(-1)
-mixer.music.set_volume(0.1)
-ouchs=mixer.Sound('assets/ouchs.ogg')
-bye=mixer.Sound('assets/goomba-destroy.ogg')
+pygame.mixer.music.load('assets/mario_theme.ogg')
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.1)
+ouchs=pygame.mixer.Sound('assets/ouchs.ogg')
+bye=pygame.mixer.Sound('assets/goomba-destroy.ogg')
 mx=43
 my=80
 big=0
 game=1
 time_set=0
-fire_time1=time.get_ticks()
-fire_time2=time.get_ticks()
-# Corrected file path and typo (assuming 'mario-end.ogg')
-end=mixer.Sound('assets/mario-end.ogg') 
-jump=mixer.Sound('assets/stomp.ogg')
+fire_time1=pygame.time.get_ticks()
+fire_time2=pygame.time.get_ticks()
+end=pygame.mixer.Sound('assets/game-over.ogg')
+jump=pygame.mixer.Sound('assets/stomp.ogg')
 sound=0
 jump_count=30
 score = 0
 goomba_direction=0
-# This file is MISSING from your assets folder!
-csound=mixer.Sound('assets/coin-sound.ogg') 
-power=mixer.Sound('assets/power-up.ogg')
-win=mixer.Sound('assets/mario-win.ogg')
+csound=pygame.mixer.Sound('assets/coin-sound.ogg')
+power=pygame.mixer.Sound('assets/power-up.ogg')
+win=pygame.mixer.Sound('assets/mario-win.ogg')
 goomba_bye=0
 black = (0,0,0)
 red = (255,0,0)
@@ -72,61 +66,61 @@ map=[
     'b-----------------------------------------------  --------------------  -------------   -------------------------------------------------------------------------------',
 ]
 
-class  Ground (sprite.Sprite):
+class  Ground (pygame.sprite.Sprite):
     def __init__(self, x,y,id):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/ground.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/ground.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.id = id
     def update(self):
         global move
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
 
 
 
-class  Castle (sprite.Sprite):
+class  Castle (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/mario-castle.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/mario-castle.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
         global move
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
 
 
 
-class  Stair (sprite.Sprite):
+class  Stair (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/stair.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/stair.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
         global move
         # run()
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             # self.rect.x+=10
             move=0
 
 
 
-class  Fireball (sprite.Sprite):
+class  Fireball (pygame.sprite.Sprite):
     def __init__(self, x,y,dir):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/fireball.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/fireball.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.direction=dir
@@ -143,7 +137,7 @@ class  Fireball (sprite.Sprite):
         # pass
         self.rect.y+=self.fall_speed
         self.fall_speed+=0.5
-        bricks=sprite.spritecollide(self,ground_group,False)
+        bricks=pygame.sprite.spritecollide(self,ground_group,False)
         for w in bricks:
                 self.rect.bottom = w.rect.top
                 self.fall_speed=2
@@ -157,60 +151,60 @@ class  Fireball (sprite.Sprite):
         else:
             self.rect.x-=5
         if no_fire==1:      
-            self.kill
+            self.kill() # FIX: Added parentheses
     
 
-class  Barrier (sprite.Sprite):
+class  Barrier (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/barrier.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/barrier.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
 
 
 
-class  Fbarrier (sprite.Sprite):
+class  Fbarrier (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/barrier.png')
-        self.rect = self.image.get_rect()
-        self.rect.center = [x,y]
-    def update(self):
-        global move
-        # run()
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
-            self.rect.x-=10
-        if keys[K_LEFT] and move==1:
-            # self.rect.x+=10
-            move=0
-
-
-
-class  Flower (sprite.Sprite):
-    def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/fire_flower.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/barrier.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
         global move
         # run()
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             # self.rect.x+=10
             move=0
-        if sprite.spritecollide(self, mario_group, False):
+
+
+
+class  Flower (pygame.sprite.Sprite):
+    def __init__(self, x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/fire_flower.png')
+        self.rect = self.image.get_rect()
+        self.rect.center = [x,y]
+    def update(self):
+        global move
+        # run()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
+            self.rect.x-=10
+        if keys[pygame.K_LEFT] and move==1:
+            # self.rect.x+=10
+            move=0
+        if pygame.sprite.spritecollide(self, mario_group, False):
             global fire
             self.kill()
             fire=1
 
-class  Goomba (sprite.Sprite):
+class  Goomba (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/goomba.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/goomba.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.direction=-3
@@ -219,58 +213,58 @@ class  Goomba (sprite.Sprite):
         self.generate=randint(1,2)
     def update(self):
         global move
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
             # self.rect.x+=10
         global goomba_bye
         self.rect.y+=self.fall_speed
         self.fall_speed+=0.5
-        bricks=sprite.spritecollide(self,ground_group,False)
+        bricks=pygame.sprite.spritecollide(self,ground_group,False)
         for w in bricks:
                 if w.id==0:
                     self.rect.bottom = w.rect.top
                     self.fall_speed = 0
-        if mario.rect.collidepoint(self.rect.centerx,self.rect.top) or sprite.spritecollide(self, fireball_group, True):
+        if mario.rect.collidepoint(self.rect.centerx,self.rect.top) or pygame.sprite.spritecollide(self, fireball_group, True):
             self.kill()
             global game, size
-            mixer.Sound.play(bye)
+            pygame.mixer.Sound.play(bye)
             goomba_bye+=1
         elif mario.rect.collidepoint(self.rect.left,self.rect.centery) or mario.rect.collidepoint(self.rect.right,self.rect.centery):
             global sound
-            mario.image = image.load('assets/ouch.png')
+            mario.image = pygame.image.load('assets/ouch.png')
             if sound == 0:
                 game=0
                 sound+=1
             mario.kill()
         if abs(self.rect.x-mario.rect.x)<20*30:
-            if sprite.spritecollide(self,obstacle_group,False):
+            if pygame.sprite.spritecollide(self,obstacle_group,False):
                 if self.direction==-3:
                     self.direction=3
                 else:
                     self.direction=-3
             self.rect.x+= self.direction
-class  Mushroom (sprite.Sprite):
+class  Mushroom (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/mushroom.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/mushroom.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
         global move
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
             # self.rect.x+=10
 
-class  Fquestion (sprite.Sprite):
+class  Fquestion (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/question.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/question.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.state = True
@@ -278,14 +272,14 @@ class  Fquestion (sprite.Sprite):
         # self.id2 = randint(1,2)
     def update(self):
         global move
-        keys = key.get_pressed()
+        keys = pygame.key.get_pressed()
         if self.state==True:
-            if keys[K_RIGHT] and move==1:
+            if keys[pygame.K_RIGHT] and move==1:
                 self.rect.x-=10
-            if keys[K_LEFT] and move==1:
+            if keys[pygame.K_LEFT] and move==1:
                 move=0
         if self.state==False:
-            if keys[K_RIGHT] and move==1:
+            if keys[pygame.K_RIGHT] and move==1:
                 self.rect.x-=5
             # self.rect.x+=10
         if self.rect.colliderect(mario.rect) and self.state == True:
@@ -296,15 +290,15 @@ class  Fquestion (sprite.Sprite):
             # else:
             #     mushroom = Mushroom(self.rect.centerx,self.rect.top-13)
             #     mushroom_group.add(mushroom)
-            self.image = image.load('assets/empty.png')
+            self.image = pygame.image.load('assets/empty.png')
             # print('yay')
             self.state = False
             obstacle_group.add(self)
 
-class  Question (sprite.Sprite):
+class  Question (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/question.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/question.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.state = True
@@ -312,14 +306,14 @@ class  Question (sprite.Sprite):
         # self.id2 = randint(1,2)
     def update(self):
         global move
-        keys = key.get_pressed()
+        keys = pygame.key.get_pressed()
         if self.state==True:
-            if keys[K_RIGHT] and move==1:
+            if keys[pygame.K_RIGHT] and move==1:
                 self.rect.x-=10
-            if keys[K_LEFT] and move==1:
+            if keys[pygame.K_LEFT] and move==1:
                 move=0
         if self.state==False:
-            if keys[K_RIGHT] and move==1:
+            if keys[pygame.K_RIGHT] and move==1:
                 self.rect.x-=5
             # self.rect.x+=10
         if self.rect.colliderect(mario.rect) and self.state == True:
@@ -329,15 +323,15 @@ class  Question (sprite.Sprite):
             # else:
             #     mushroom = Mushroom(self.rect.centerx,self.rect.top-13)
             #     mushroom_group.add(mushroom)
-            self.image = image.load('assets/empty.png')
+            self.image = pygame.image.load('assets/empty.png')
             # print('yay')
             self.state = False
             obstacle_group.add(self)
             
-class  Mquestion (sprite.Sprite):
+class  Mquestion (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/question.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/question.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.state = True
@@ -345,14 +339,14 @@ class  Mquestion (sprite.Sprite):
         # self.id2 = randint(1,2)
     def update(self):
         global move
-        keys = key.get_pressed()
+        keys = pygame.key.get_pressed()
         if self.state==True:
-            if keys[K_RIGHT] and move==1:
+            if keys[pygame.K_RIGHT] and move==1:
                 self.rect.x-=10
-            if keys[K_LEFT] and move==1:
+            if keys[pygame.K_LEFT] and move==1:
                 move=0
         if self.state==False:
-            if keys[K_RIGHT] and move==1:
+            if keys[pygame.K_RIGHT] and move==1:
                 self.rect.x-=5
             # self.rect.x+=10
         if self.rect.colliderect(mario.rect) and self.state == True:
@@ -362,67 +356,67 @@ class  Mquestion (sprite.Sprite):
             # else:
             mushroom = Mushroom(self.rect.centerx,self.rect.top-13)
             mushroom_group.add(mushroom)
-            self.image = image.load('assets/empty.png')
+            self.image = pygame.image.load('assets/empty.png')
             # print('yay')
             self.state = False
             obstacle_group.add(self)
 
-class  Brick (sprite.Sprite):
+class  Brick (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/mario-brick.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/mario-brick.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.id = 0
     def update(self):
         global move
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
             # self.rect.x+=10
 
-class  Tnt (sprite.Sprite):
+class  Tnt (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/tnt.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/tnt.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
         global move
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
         #     self.rect.x+=10
 
-class  Coin (sprite.Sprite):
+class  Coin (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/coin2.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/coin2.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
     def update(self):
         global move
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and move==1:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and move==1:
             self.rect.x-=10
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
         #     self.rect.x+=10
         global score
-        if sprite.spritecollide(self, mario_group, False):
+        if pygame.sprite.spritecollide(self, mario_group, False):
             self.kill()
-            mixer.Sound.play(csound)
+            pygame.mixer.Sound.play(csound)
             score+=1
             # print(score)
 
-class  Mario (sprite.Sprite):
+class  Mario (pygame.sprite.Sprite):
     def __init__(self, x,y):
-        sprite.Sprite.__init__(self)
-        self.image = image.load('assets/mario1.png')
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load('assets/mario1.png')
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
         self.direction = 'down'
@@ -433,24 +427,24 @@ class  Mario (sprite.Sprite):
         self.my=48
         
     def update(self):
-        keys = key.get_pressed()
+        keys = pygame.key.get_pressed()
         
         # if self.rect.centerx >= width/2:
-        global move, mari, mm, fire, fireball_set, fire_time1, fire_time2, time_set, game, no_fire
+        global move, mari, mm, fire, fireball_set, fire_time1, fire_time2, time_set, game, no_fire, big
         #     move=1
         # if fire==1:
-        if sprite.spritecollide(self, testing_group, False):
+        if pygame.sprite.spritecollide(self, testing_group, False):
             no_fire=1
             
             print('test')
-            # time.delay(5000)
+            # pygame.time.delay(5000)
             fireball_group.empty()
             game=3
         if self.rect.y >= height:
             game=0
-        fire_time2=time.get_ticks()
+        fire_time2=pygame.time.get_ticks()
         # print(fire_time2)
-        if sprite.spritecollide(self, fquestion_group, False):
+        if pygame.sprite.spritecollide(self, fquestion_group, False):
             no_fire=1
         if fire_time2-fire_time1>=500:
             time_set=1
@@ -459,33 +453,33 @@ class  Mario (sprite.Sprite):
             # print(fire)
         if self.rect.centerx >= width/2:
             move=1
-        if keys[K_LEFT] and move==1:
+        if keys[pygame.K_LEFT] and move==1:
             move=0
         # global fire
         if fire==1:
-            self.image = image.load('assets/fire_mario.png')
+            self.image = pygame.image.load('assets/fire_mario.png')
             fireball_set=fire
             # fire=3
             # pass
         self.rect.y+=self.fall_speed
         self.fall_speed+=0.5
         # print(self.fall_speed)
-        if sprite.spritecollide(self,mushroom_group,True):
-            global big
+        if pygame.sprite.spritecollide(self,mushroom_group,True):
+            
             big=1
             self.mx=36
             self.my=60
-            # self.image = transform.scale(self.image,(43,150))
+            # self.image = pygame.transform.scale(self.image,(43,150))
             # print('mushroom')
-            mixer.Sound.play(power)
-        if sprite.spritecollide(self,tnt_group,False):
+            pygame.mixer.Sound.play(power)
+        if pygame.sprite.spritecollide(self,tnt_group,False):
             global goomba_bye
-            self.image = image.load('assets/ouch.png')
-            mixer.Sound.play(ouchs)
+            self.image = pygame.image.load('assets/ouch.png')
+            pygame.mixer.Sound.play(ouchs)
         # global keys, fireball
-        keys=key.get_pressed()
+        keys=pygame.key.get_pressed()
         
-        if fireball_set==1 and keys[K_LCTRL] | keys[K_LSHIFT] and time_set==1:
+        if fireball_set==1 and (keys[pygame.K_LCTRL] | keys[pygame.K_LSHIFT]) and time_set==1:
             fireball=Fireball(self.rect.centerx,self.rect.centery,self.direction)
             fireball_group.add(fireball)
             time_set=0
@@ -496,17 +490,17 @@ class  Mario (sprite.Sprite):
         # if goomba_bye==0:
         #     if self.rect.collidepoint(goomba.rect.left,goomba.rect.centery) or self.rect.collidepoint(goomba.rect.right,goomba.rect.centery):
         #         # goomba.kill()
-        #         self.image = image.load('assets/ouch.png')
-        #         mixer.Sound.play(ouchs)
+        #         self.image = pygame.image.load('ouch.png')
+        #         pygame.mixer.Sound.play(ouchs)
         #         # display.update()
-        #         # time.delay(5000)
+        #         # pygame.time.delay(5000)
         #         self.kill()
-        bricks=sprite.spritecollide(self,obstacle_group,False)        
+        bricks=pygame.sprite.spritecollide(self,obstacle_group,False)        
         for w in bricks:
                 self.rect.bottom = w.rect.top
                 self.fall_speed=2
                 self.on_ground=True
-        keys = key.get_pressed()
+        keys = pygame.key.get_pressed()
         if fire==0:
             mari=0
             mm=0
@@ -518,52 +512,52 @@ class  Mario (sprite.Sprite):
             mari='assets/fire_mario.png'
             mm='assets/fire_mario-left.png'
             fire=3
-            transform.scale(self.image,(36,60))
+            pygame.transform.scale(self.image,(36,60))
         if move == 0:
-            if keys[K_RIGHT]:
+            if keys[pygame.K_RIGHT]:
                     if self.direction != 'right':
-                        self.image = image.load(mari)
+                        self.image = pygame.image.load(mari)
                         self.direction='right'
-                        self.image = transform.scale(self.image,(self.mx,self.my))
+                        self.image = pygame.transform.scale(self.image,(self.mx,self.my))
                     else:
                         self.rect.x += 10
-            if keys[K_LEFT]:
+            if keys[pygame.K_LEFT]:
                     if self.direction != 'left':
-                        self.image = image.load(mm)
+                        self.image = pygame.image.load(mm)
                         self.direction='left'
-                        self.image = transform.scale(self.image,(self.mx,self.my))
+                        self.image = pygame.transform.scale(self.image,(self.mx,self.my))
                         self.rect.update(self.rect.x,self.rect.y,self.mx,self.my)
                     else:
                         self.rect.x -= 10
         if move==1:
-            if keys[K_RIGHT]:
+            if keys[pygame.K_RIGHT]:
                 if self.direction != 'right':
-                            self.image = image.load(mari)
+                            self.image = pygame.image.load(mari)
                             self.direction='right'
-                            self.image = transform.scale(self.image,(self.mx,self.my))
-            if keys[K_LEFT]:
+                            self.image = pygame.transform.scale(self.image,(self.mx,self.my))
+            if keys[pygame.K_LEFT]:
                 if self.direction != 'left':
-                        self.image = image.load(mm)
+                        self.image = pygame.image.load(mm)
                         self.direction='left'
-                        self.image = transform.scale(self.image,(self.mx,self.my))
+                        self.image = pygame.transform.scale(self.image,(self.mx,self.my))
                         self.rect.update(self.rect.x,self.rect.y,self.mx,self.my)
         
-        bricks=sprite.spritecollide(self,obstacle_group,False)        
+        bricks=pygame.sprite.spritecollide(self,obstacle_group,False)        
         for w in bricks:
             if self.direction == 'left':
                 self.rect.left = w.rect.right
             if self.direction == 'right':
                 self.rect.right = w.rect.left
         if self.on_ground == True:
-            if keys[K_UP]:
+            if keys[pygame.K_UP]:
                         self.direction='up'
                         self.rect.y-=80
-                        mixer.Sound.play(jump)
+                        pygame.mixer.Sound.play(jump)
                         self.on_ground = False
                         
     #     if self.make_jump:
     #         self.jump()
-    #         bricks=sprite.spritecollide(self,obstacle_group,False)        
+    #         bricks=pygame.sprite.spritecollide(self,obstacle_group,False)        
     #         for w in bricks:
     #             if self.direction == 'up':
     #                 self.rect.bottom = w.rect.top
@@ -577,21 +571,21 @@ class  Mario (sprite.Sprite):
             jump_count=30
             self.make_jump=False
 
-firework_group = sprite.Group()
-stair_group = sprite.Group()
-castle_group = sprite.Group()
-fireball_group = sprite.Group()
-fquestion_group = sprite.Group()
-flower_group = sprite.Group()
-testing_group = sprite.Group()
-goomba_group = sprite.Group()
-mushroom_group = sprite.Group()
-obstacle_group = sprite.Group()
-ground_group = sprite.Group()
-question_group = sprite.Group()
-mario_group = sprite.Group()
-coin_group = sprite.Group()
-tnt_group = sprite.Group()
+firework_group = pygame.sprite.Group()
+stair_group = pygame.sprite.Group()
+castle_group = pygame.sprite.Group()
+fireball_group = pygame.sprite.Group()
+fquestion_group = pygame.sprite.Group()
+flower_group = pygame.sprite.Group()
+testing_group = pygame.sprite.Group()
+goomba_group = pygame.sprite.Group()
+mushroom_group = pygame.sprite.Group()
+obstacle_group = pygame.sprite.Group()
+ground_group = pygame.sprite.Group()
+question_group = pygame.sprite.Group()
+mario_group = pygame.sprite.Group()
+coin_group = pygame.sprite.Group()
+tnt_group = pygame.sprite.Group()
 # fireball_group.upload()
 # mario_group.
 size=30
@@ -647,13 +641,16 @@ for ro in map:
     x=0
     y+=size
 size_window = (width, height)
-window = display.set_mode(size_window)
-display.set_caption('Mario')
-run=True
-while run:
-    for e in event.get():
-        if e.type == QUIT:
-            run = False
+window = pygame.display.set_mode(size_window)
+pygame.display.set_caption('Mario')
+running=True
+
+def tick():
+    global running, move, game, mari, mm, fire, fireball_set, fire_time1, fire_time2, time_set, no_fire, ouchs, end, win, score
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            pygame.quit()
+            return
     window.fill(mario_blue)
     # print(fire_time1)
     if game==1:
@@ -688,34 +685,40 @@ while run:
         firework_group.draw(window)
         fireball_group.update()
         # Fireball.upload(fireball_group)
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and mario.rect.x >= width/2:
-            move==1
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT] and mario.rect.x >= width/2:
+            move=1 
 
     if game==3:
         # print('test')
         # fireball_group.()
         # Fireball.kill
-        # time.delay(1000)
-        mixer.music.fadeout(1000)
-        firework=image.load('assets/fireworks.png')
+        # pygame.time.delay(1000)
+        pygame.mixer.music.fadeout(1000)
+        firework=pygame.image.load('assets/fireworks.png')
         window.blit(firework, (width//2-150, 30))
-        mixer.Sound.play(win)
+        pygame.mixer.Sound.play(win)
         text('YOU WIN!', width/2-250, height/2-100, 'green', 100)
-        display.update()
-        time.delay(16000)
-        run=False
+        pygame.display.update()
+        pygame.time.delay(16000)
+        pygame.quit()
+        return
     
     if game==0:
-        mixer.music.fadeout(1000)
-        mixer.Sound.play(end)
+        pygame.mixer.music.fadeout(1000)
+        pygame.mixer.Sound.play(end)
         text('GAME OVER', width/2-250, height/2-100, 'red', 100)
-        display.update()
-        time.delay(5500)
-        run=False
+        pygame.display.update()
+        pygame.time.delay(5500)
+        pygame.quit()
+        return
     
-    display.update()
-    time.delay(50)
+    pygame.display.update()
+    # pygame.time.delay(50) # FIX: Removed this line
     
 
-quit()
+def main():
+    pygame.run(tick)
+
+if __name__ == "__main__":
+    main()
