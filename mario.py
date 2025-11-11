@@ -16,7 +16,8 @@ mm=0
 move=0
 fire=0
 no_fire=0
-pygame.mixer.music.load('assets/mario_theme.ogg')
+# FIX: Changed 'mario_theme.ogg' to 'mario-theme.ogg'
+pygame.mixer.music.load('assets/mario-theme.ogg')
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.1)
 ouchs=pygame.mixer.Sound('assets/ouchs.ogg')
@@ -28,7 +29,8 @@ game=1
 time_set=0
 fire_time1=pygame.time.get_ticks()
 fire_time2=pygame.time.get_ticks()
-end=pygame.mixer.Sound('assets/game-over.ogg')
+# FIX: Changed 'game-over.ogg' to 'mario-end.ogg'
+end=pygame.mixer.Sound('assets/mario-end.ogg')
 jump=pygame.mixer.Sound('assets/stomp.ogg')
 sound=0
 jump_count=30
@@ -615,6 +617,7 @@ for ro in map:
             mario_group.add(mario)
         if s == 't':
             tnt = Tnt(x,y)
+            # FIX: Corrected tnt_group..add to tnt_group.add
             tnt_group.add(tnt)
         if s == 'g':
             goomba = Goomba(x,y)
