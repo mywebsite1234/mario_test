@@ -143,7 +143,7 @@ class  Goomba (sprite.Sprite):
         self.generate=randint(1,2)
     
     # Passing global state into update
-    def update(self, mario_move, keys, ground_group, mario, fireball_group, obstacle_group):
+    def update(self, mario_move, keys, ground_group, mario, fireball_group, obstacle_group, bye):
         if keys[K_RIGHT] and mario_move==1:
             self.rect.x-=10
         if keys[K_LEFT] and mario_move==1:
@@ -704,3 +704,4 @@ async def main():
 
 # This line runs the main function when PyScript loads the file
 asyncio.run(main())
+
