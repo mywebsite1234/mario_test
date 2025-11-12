@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+    <py-config>
+      [[packages]]
+      "pygame-ce" = "*"
+    </py-config>
+
+  </head>
+  <body>
+    <h2>My Pygame in the Browser</h2>
+    
+    <div id="game-container"></div>
+
+    <py-script src="main.py" target="game-container"></py-script>
+
+  </body>
+</html>
