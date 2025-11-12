@@ -622,7 +622,7 @@ async def main():
             tnt_group.update(mario_move, keys)
             
             for goomba in goomba_group:
-                goomba_result = goomba.update(mario_move, keys, ground_group, mario, fireball_group, obstacle_group)
+                goomba_result = goomba.update(mario_move, keys, ground_group, mario, fireball_group, obstacle_group, bye)
                 if goomba_result == 1:
                     goomba_bye += 1
                 elif goomba_result == 2:
@@ -704,4 +704,5 @@ async def main():
 
 # This line runs the main function when PyScript loads the file
 asyncio.run(main())
+
 
