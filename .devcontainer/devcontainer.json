@@ -1,33 +1,22 @@
 {
-  "name": "Python Pygame with GraalVM",
-  // Base image with Python and standard tools
-  "image": "mcr.microsoft.com/devcontainers/python:3.12", 
-  
-  "features": {
-    // 1. Install necessary system dependencies for Pygame/SDL graphics
-    "ghcr.io/devcontainers/features/apt-get-packages:1": {
-      "packages": "libsdl2-dev, libsdl2-image-dev, libsdl2-mixer-dev, libsdl2-ttf-dev, python3-dev, build-essential"
-    },
-    // 2. Install GraalVM for Native Image compilation (version 21 recommended for stability)
-    "ghcr.io/devcontainers/features/java:1": {
-      "version": "21-graal",
-      "installGraalVMNativeImage": true
-    },
-    // 3. Install common utilities
-    "ghcr.io/devcontainers/features/common-utils:2": {}
+  "name": "Pygame with GraalPy Standalone",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+
+  // 1. Install the system libraries for Pygame (SDL)
+  "updateContentCommand": "sudo apt-get update && sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev build-essential",
+
+  // 2. Download GraalPy Standalone, extract it, and install Pygame
+  "postCreateCommand": "cd /home/vscode && wget -q https://github.com/oracle/graalpython/releases/download/graal-24.0.0/graalpy-community-24.0.0-linux-amd64.tar.gz && tar -xzf graalpy-community-24.0.0-linux-amd64.tar.gz && mv graalpy-community-24.0.0-linux-amd64 graalpy && /home/vscode/graalpy/bin/graalpy -m pip install pygame",
+
+  // 3. Add GraalPy to the system PATH so you can just type 'graalpy'
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/graalpy/bin"
   },
-  
-  "postCreateCommand": "pip install pygame",
-  
-  "settings": {
-    "terminal.integrated.defaultProfile.linux": "zsh"
-  },
-  
+
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-python.python",
-        "vscjava.vscode-java-pack"
+        "ms-python.python"
       ]
     }
   }
