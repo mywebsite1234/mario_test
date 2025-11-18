@@ -1,5 +1,6 @@
 from pygame import*
 from random import*
+import asyncio
 
 def text(message,x,y,font_color,font_size, font_type='assets/font.otf'):
         font_type=font.Font(font_type,font_size)
@@ -646,73 +647,76 @@ for ro in map:
 size_window = (width, height)
 window = display.set_mode(size_window)
 display.set_caption('Mario')
-run=True
-while run:
-    for e in event.get():
-        if e.type == QUIT:
-            run = False
-    window.fill(mario_blue)
-    # print(fire_time1)
-    if game==1:
-        testing_group.update()
-        castle_group.update()
-        stair_group.update()
-        question_group.update()
-        coin_group.update()
-        obstacle_group.update()
-        mushroom_group.update()
-        tnt_group.update()
-        goomba_group.update()
-        flower_group.update()
-        # coin_group.update()
-        mario_group.update()
-        # question_group.update()
+async def main():
+    run=True
+    while run:
+        for e in event.get():
+            if e.type == QUIT:
+                run = False
+        window.fill(mario_blue)
+        # print(fire_time1)
+        if game==1:
+            testing_group.update()
+            castle_group.update()
+            stair_group.update()
+            question_group.update()
+            coin_group.update()
+            obstacle_group.update()
+            mushroom_group.update()
+            tnt_group.update()
+            goomba_group.update()
+            flower_group.update()
+            # coin_group.update()
+            mario_group.update()
+            # question_group.update()
 
-    if game==1 or game==3:
+        if game==1 or game==3:
+            
+            tnt_group.draw(window)
+            flower_group.draw(window)
+            obstacle_group.draw(window)
+            ground_group.draw(window)
+            mushroom_group.draw(window)
+            question_group.draw(window)
+            coin_group.draw(window)
+            goomba_group.draw(window)
+            castle_group.draw(window)
+            fireball_group.draw(window)
+            stair_group.draw(window)
+            mario_group.draw(window)
+            firework_group.draw(window)
+            fireball_group.update()
+            # Fireball.upload(fireball_group)
+            keys = key.get_pressed()
+            if keys[K_RIGHT] and mario.rect.x >= width/2:
+                move==1
+
+        if game==3:
+            # print('test')
+            # fireball_group.()
+            # Fireball.kill
+            # time.delay(1000)
+            mixer.music.fadeout(1000)
+            firework=image.load('assets/fireworks.png')
+            window.blit(firework, (width//2-150, 30))
+            mixer.Sound.play(win)
+            text('YOU WIN!', width/2-250, height/2-100, 'green', 100)
+            display.update()
+            await asyncio.sleep(16000)
+            run=False
         
-        tnt_group.draw(window)
-        flower_group.draw(window)
-        obstacle_group.draw(window)
-        ground_group.draw(window)
-        mushroom_group.draw(window)
-        question_group.draw(window)
-        coin_group.draw(window)
-        goomba_group.draw(window)
-        castle_group.draw(window)
-        fireball_group.draw(window)
-        stair_group.draw(window)
-        mario_group.draw(window)
-        firework_group.draw(window)
-        fireball_group.update()
-        # Fireball.upload(fireball_group)
-        keys = key.get_pressed()
-        if keys[K_RIGHT] and mario.rect.x >= width/2:
-            move==1
-
-    if game==3:
-        # print('test')
-        # fireball_group.()
-        # Fireball.kill
-        # time.delay(1000)
-        mixer.music.fadeout(1000)
-        firework=image.load('assets/fireworks.png')
-        window.blit(firework, (width//2-150, 30))
-        mixer.Sound.play(win)
-        text('YOU WIN!', width/2-250, height/2-100, 'green', 100)
+        if game==0:
+            mixer.music.fadeout(1000)
+            mixer.Sound.play(end)
+            text('GAME OVER', width/2-250, height/2-100, 'red', 100)
+            display.update()
+            await asyncio.sleep(5500)
+            run=False
+        
         display.update()
-        time.delay(16000)
-        run=False
-    
-    if game==0:
-        mixer.music.fadeout(1000)
-        mixer.Sound.play(end)
-        text('GAME OVER', width/2-250, height/2-100, 'red', 100)
-        display.update()
-        time.delay(5500)
-        run=False
-    
-    display.update()
-    time.delay(50)
-    
+        time.delay(50)
+        await asyncio.sleep(0)
 
-quit()
+    quit()
+
+asyncio.run(main())
