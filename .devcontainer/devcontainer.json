@@ -1,18 +1,34 @@
 {
-  // Use the Python 3.11 image
-  "image": "mcr.microsoft.com/devcontainers/python:3.11",
-
+  "name": "Python Pygame with GraalVM",
+  // Base image with Python and standard tools
+  "image": "mcr.microsoft.com/devcontainers/python:3.12", 
+  
   "features": {
-    // This adds the virtual desktop (Fluxbox) and web VNC client (noVNC)
-    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+    // 1. Install necessary system dependencies for Pygame/SDL graphics
+    "ghcr.io/devcontainers/features/apt-get-packages:1": {
+      "packages": "libsdl2-dev, libsdl2-image-dev, libsdl2-mixer-dev, libsdl2-ttf-dev, python3-dev, build-essential"
+    },
+    // 2. Install GraalVM for Native Image compilation (version 21 recommended for stability)
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21-graal",
+      "installGraalVMNativeImage": true
+    },
+    // 3. Install common utilities
+    "ghcr.io/devcontainers/features/common-utils:2": {}
   },
-
-  "forwardPorts": [
-    // Forwards the web-based VNC viewer
-    6080,
-    // Forwards the raw VNC port
-    5901
-  ],
-
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y python3-sdl2"
+  
+  "postCreateCommand": "pip install pygame",
+  
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "zsh"
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  }
 }
