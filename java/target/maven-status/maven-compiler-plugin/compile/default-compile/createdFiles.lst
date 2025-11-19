@@ -1,6 +1,7 @@
 com/example/game/MarioGame.class
 com/example/game/MarioGame$1.class
 com/example/game/MarioGame$MarioFactory.class
+com/example/game/Launcher.class
 com/example/game/MarioGame$2.class
 com/example/game/MarioGame$3.class
 com/example/game/MarioType.class
